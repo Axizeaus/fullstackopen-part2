@@ -10,6 +10,8 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState('');
+  const [filter, setFilter] = useState('');
+  const [display, setDisplay] = useState(persons)
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -43,6 +45,19 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    const filterData = event.target.value
+    setFilter(filterData)
+    const re = new RegExp(filterData.toLowerCase());
+    let found = []
+    persons.forEach((person)=>{
+      if (re.test(person.name.toLowerCase())) {
+        found.push(person)
+      };
+    })
+    setDisplay(found)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -53,10 +68,12 @@ const App = () => {
         onNameChange={handleNameChange}
         onNumberChange={handleNumberChange}
       />
+      <h2>Filter</h2>
+      <input value={filter} onChange={handleFilterChange}/>
       <h2>Numbers</h2>
       <ul>
         {
-          persons.map((person) => 
+          display.map((person) => 
           <Person name={person.name} key={person.name} number={person.number}/>)
         }
       </ul>
