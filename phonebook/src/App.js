@@ -20,6 +20,7 @@ const App = () => {
         alert("fill the form properly");
       } else {
         setPersons(persons.concat({ name: newName, number: newNumber }));
+        setDisplay(persons);
       }
       
     } else {
@@ -59,7 +60,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <>
       <h2>Phonebook</h2>
       <PersonForm 
         onSubmit={addPerson}
@@ -71,17 +72,30 @@ const App = () => {
       <h2>Filter</h2>
       <input value={filter} onChange={handleFilterChange}/>
       <h2>Numbers</h2>
-      <ul>
-        {
-          display.map((person) => 
-          <Person name={person.name} key={person.name} number={person.number}/>)
-        }
-      </ul>
-    </div>
+      <Display display={display} />
+    </>
   );
 };
 
-const PersonForm = ({onSubmit, name, number, onNameChange, onNumberChange}) => {
+const Display = ({display}) => {
+  return (
+    <>
+      <ul>
+        {display.map((person) => (
+          <Person name={person.name} key={person.name} number={person.number} />
+        ))}
+      </ul>
+    </>
+  );
+}
+
+const PersonForm = ({
+  onSubmit,
+  name,
+  number,
+  onNameChange,
+  onNumberChange,
+}) => {
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -99,7 +113,7 @@ const PersonForm = ({onSubmit, name, number, onNameChange, onNumberChange}) => {
       </form>
     </>
   );
-}
+};
 
 const Person = ({name, number}) => {
   return (
