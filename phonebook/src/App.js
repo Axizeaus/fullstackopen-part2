@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import PersonForm from "./components/PersonForm";
 import Display from "./components/Display";
+import personService from './services/personService';
+import axios from "axios";
 
 const App = () => {
   
@@ -9,19 +10,20 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
-  const [display, setDisplay] = useState(persons)
+  const [display, setDisplay] = useState([]);
 
-  const hook = () => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data);
-        setDisplay(persons)
-      })
+  const initialHook = () => {
+    console.log('initialHook runs');
+    personService.getAll().then((response) => {
+      console.log(response);
+      setPersons(response);
+      setDisplay(response);
+    });
   }
-
-  useEffect(hook, [])
-
+  
+  useEffect(initialHook, []);
+  console.log(persons);
+  
   const addPerson = (event) => {
     event.preventDefault()
     if (personCheck(newName)){
@@ -32,11 +34,11 @@ const App = () => {
           name : newName,
           number : newNumber
         }
-        setPersons(persons.concat({ name: newName, number: newNumber }));
-        setDisplay(persons);
-        axios
-          .post('http://localhost:3001/persons', personObject)
-          .then(response => console.log(response))
+        console.log("add person runs");
+        personService.create(personObject)
+          .then((response) => {
+            setPersons(persons.concat(response.data))
+            setDisplay(display.concat(response.data))});
       }
       
     } else {
@@ -75,6 +77,11 @@ const App = () => {
     setDisplay(found)
   }
 
+  const handleUpdateChange = (id) => {
+    console.log('this is update');
+    console.log('button id => ', id)
+  }
+
   return (
     <>
       <h1>Phonebook</h1>
@@ -88,7 +95,7 @@ const App = () => {
       <h2>Filter</h2>
       <input value={filter} onChange={handleFilterChange}/>
       <h2>Numbers</h2>
-      <Display display={display} />
+      <Display display={display} onUpdate={handleUpdateChange} />
     </>
   );
 };
