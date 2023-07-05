@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from 'axios'
+import axios from 'axios';
+import PersonForm from "./components/PersonForm";
+import Display from "./components/Display";
 
 const App = () => {
   
@@ -10,18 +12,15 @@ const App = () => {
   const [display, setDisplay] = useState(persons)
 
   const hook = () => {
-    console.log('this is hook');
     axios
       .get("http://localhost:3001/persons")
       .then(response => {
-        console.log("this is working");
         setPersons(response.data);
         setDisplay(persons)
       })
   }
 
   useEffect(hook, [])
-  console.log(`render ${persons}`)
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -29,8 +28,15 @@ const App = () => {
       if(newName === '' || newNumber === ''){
         alert("fill the form properly");
       } else {
+        const personObject = {
+          name : newName,
+          number : newNumber
+        }
         setPersons(persons.concat({ name: newName, number: newNumber }));
         setDisplay(persons);
+        axios
+          .post('http://localhost:3001/persons', personObject)
+          .then(response => console.log(response))
       }
       
     } else {
@@ -71,7 +77,7 @@ const App = () => {
 
   return (
     <>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
       <PersonForm 
         onSubmit={addPerson}
         name = {newName}
@@ -86,52 +92,5 @@ const App = () => {
     </>
   );
 };
-
-const Display = ({display}) => {
-  return (
-    <>
-      <ul>
-        {display.map((person) => (
-          <Person name={person.name} key={person.name} number={person.number} />
-        ))}
-      </ul>
-    </>
-  );
-}
-
-const PersonForm = ({
-  onSubmit,
-  name,
-  number,
-  onNameChange,
-  onNumberChange,
-}) => {
-  return (
-    <>
-      <form onSubmit={onSubmit}>
-        <div>
-          name:
-          <input value={name} onChange={onNameChange} />
-        </div>
-        <div>
-          number:
-          <input value={number} onChange={onNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-    </>
-  );
-};
-
-const Person = ({name, number}) => {
-  return (
-    <>
-        <li>{name}</li>
-        <li>{number}</li>
-    </>
-  );
-}
 
 export default App;
