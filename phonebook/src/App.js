@@ -35,8 +35,8 @@ const App = () => {
         console.log("add person runs");
         personService.create(personObject)
           .then((response) => {
-            setPersons(persons.concat(response.data))
-            setDisplay(display.concat(response.data))});
+            setPersons(persons.concat(response))
+            setDisplay(display.concat(response))});
       }
     }
   }
@@ -81,13 +81,13 @@ const App = () => {
       number: window.prompt('enter new number or click ok', target.number)
     }
     personService.update(target.id, updatedPerson)
-      .then(resp => hook())
+      .then(() => hook())
   }
 
   const handleDelete = (id) => {
     const target = persons.find(person => person.id === id);
     if (target && window.confirm('do you really wanna delete this contact?')){
-      personService.del(id).then(response => alert('delete successful'));
+      personService.del(id).then(() => alert('delete successful'));
     }
     setDisplay(display.filter(person => person.id !== id))
   }

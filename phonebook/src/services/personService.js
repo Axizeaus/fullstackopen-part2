@@ -7,11 +7,11 @@ const getAll = () => {
 }
 
 const create = (newObj) => {
-  return axios.post(baseURl, newObj)
+  return axios.post(baseURl, newObj).then(response => response.data)
 }
 
 const update = (id, newObj) => {
-  return axios.put(`${baseURl}/${id}`, newObj);
+  return axios.put(`${baseURl}/${id}`, newObj).then(response => response.data);
 }
 
 const del = (id) => {
