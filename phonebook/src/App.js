@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PersonForm from "./components/PersonForm";
 import Display from "./components/Display";
 import personService from './services/personService';
-import axios from "axios";
+import Message from "./components/Message";
 
 const App = () => {
   
@@ -11,22 +11,31 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
   const [display, setDisplay] = useState([]);
-
+  const [message, setMessage] = useState('is this even working');
+  
   const hook = () => {
     personService.getAll().then((response) => {
       setPersons(response);
       setDisplay(response);
+      setMessage(null);
     });
   }
   
   useEffect(hook, []);
   console.log('display => ', display)
-  
+
+  function messageShowAndDelete(message) {
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  }
   const addPerson = (event) => {
     event.preventDefault()
     if (personCheck(newName)){
       if(newName === '' || newNumber === ''){
-        alert("fill the form properly");
+        messageShowAndDelete("fill the form properly");
+        
       } else {
         const personObject = {
           name : newName,
@@ -36,7 +45,9 @@ const App = () => {
         personService.create(personObject)
           .then((response) => {
             setPersons(persons.concat(response))
-            setDisplay(display.concat(response))});
+            setDisplay(display.concat(response))
+            messageShowAndDelete(`Added ${personObject.name} successfully`);
+          });
       }
     }
   }
@@ -68,26 +79,30 @@ const App = () => {
         found.push(person)
       };
     })
-    setDisplay(found)
+    setDisplay(found);
+    messageShowAndDelete('filtered list')
   }
 
   const handleUpdateChange = (id) => {
     const target = persons.find(person => person.id === id);
-    console.log('this is update');
-    console.log('button id => ', id);
-    console.log('target ==> ', target);
     const updatedPerson = {
       name: window.prompt('Enter name or click ok', target.name),
       number: window.prompt('enter new number or click ok', target.number)
     }
     personService.update(target.id, updatedPerson)
-      .then(() => hook())
+      .then(() => {
+        messageShowAndDelete("Updated successfully");
+         hook()
+        })
+      .catch(error => {
+        messageShowAndDelete('Updating failed');
+      })
   }
 
   const handleDelete = (id) => {
     const target = persons.find(person => person.id === id);
     if (target && window.confirm('do you really wanna delete this contact?')){
-      personService.del(id).then(() => alert('delete successful'));
+      personService.del(id).then(() => messageShowAndDelete('Deletion successful.'));
     }
     setDisplay(display.filter(person => person.id !== id))
   }
@@ -95,6 +110,7 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
+      <Message message={message}/>
       <PersonForm 
         onSubmit={addPerson}
         name = {newName}
