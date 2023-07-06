@@ -88,10 +88,11 @@ const App = () => {
   }
 
   const handleDelete = (id) => {
-    const target = persons.find(person => person.id === id)
-    console.log('this is delete');
-    console.log('button id ===> ', id)
-    console.log('target ===> ', target)
+    const target = persons.find(person => person.id === id);
+    if (target){
+      personService.del(id).then(response => alert('delete successful'));
+    }
+    setDisplay(display.filter(person => person.id !== id))
   }
 
   return (
