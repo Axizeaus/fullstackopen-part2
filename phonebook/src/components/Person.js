@@ -1,4 +1,4 @@
-export default function Person({ name, number, onUpdate, onDelete }) {
+export default function Person({ name, number, onDelete, onUpdate }) {
   return (
     <>
       <li>{name}</li>

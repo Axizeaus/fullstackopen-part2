@@ -12,15 +12,14 @@ const App = () => {
   const [filter, setFilter] = useState('');
   const [display, setDisplay] = useState([]);
 
-  const initialHook = () => {
-    console.log('initialHook runs');
+  const hook = () => {
     personService.getAll().then((response) => {
       setPersons(response);
       setDisplay(response);
     });
   }
   
-  useEffect(initialHook, []);
+  useEffect(hook, []);
   console.log('display => ', display)
   
   const addPerson = (event) => {
@@ -39,11 +38,7 @@ const App = () => {
             setPersons(persons.concat(response.data))
             setDisplay(display.concat(response.data))});
       }
-      
-    } else {
-      alert(`${newName} is already on the list`)
     }
-    
   }
 
   const personCheck = (newPerson) => {
@@ -77,14 +72,16 @@ const App = () => {
   }
 
   const handleUpdateChange = (id) => {
-
-    // TODO : ask for user's input to either update name or number;
-    // lead : possibly similar to the note importance update part.
     const target = persons.find(person => person.id === id);
     console.log('this is update');
     console.log('button id => ', id);
     console.log('target ==> ', target);
-
+    const updatedPerson = {
+      name: window.prompt('Enter name or click ok', target.name),
+      number: window.prompt('enter new number or click ok', target.number)
+    }
+    personService.update(target.id, updatedPerson)
+      .then(resp => hook())
   }
 
   const handleDelete = (id) => {
@@ -108,7 +105,7 @@ const App = () => {
       <h2>Filter</h2>
       <input value={filter} onChange={handleFilterChange}/>
       <h2>Numbers</h2>
-      <Display display={display} onUpdate={handleUpdateChange} onDelete={handleDelete}/>
+      <Display display={display} onDelete={handleDelete} onUpdate={handleUpdateChange}/>
     </>
   );
 };
