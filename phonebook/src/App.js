@@ -15,14 +15,13 @@ const App = () => {
   const initialHook = () => {
     console.log('initialHook runs');
     personService.getAll().then((response) => {
-      console.log(response);
       setPersons(response);
       setDisplay(response);
     });
   }
   
   useEffect(initialHook, []);
-  console.log(persons);
+  console.log('display => ', display)
   
   const addPerson = (event) => {
     event.preventDefault()
@@ -78,8 +77,21 @@ const App = () => {
   }
 
   const handleUpdateChange = (id) => {
+
+    // TODO : ask for user's input to either update name or number;
+    // lead : possibly similar to the note importance update part.
+    const target = persons.find(person => person.id === id);
     console.log('this is update');
-    console.log('button id => ', id)
+    console.log('button id => ', id);
+    console.log('target ==> ', target);
+
+  }
+
+  const handleDelete = (id) => {
+    const target = persons.find(person => person.id === id)
+    console.log('this is delete');
+    console.log('button id ===> ', id)
+    console.log('target ===> ', target)
   }
 
   return (
@@ -95,7 +107,7 @@ const App = () => {
       <h2>Filter</h2>
       <input value={filter} onChange={handleFilterChange}/>
       <h2>Numbers</h2>
-      <Display display={display} onUpdate={handleUpdateChange} />
+      <Display display={display} onUpdate={handleUpdateChange} onDelete={handleDelete}/>
     </>
   );
 };
