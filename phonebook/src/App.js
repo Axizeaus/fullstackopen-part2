@@ -89,7 +89,7 @@ const App = () => {
 
   const handleDelete = (id) => {
     const target = persons.find(person => person.id === id);
-    if (target){
+    if (target && window.confirm('do you really wanna delete this contact?')){
       personService.del(id).then(response => alert('delete successful'));
     }
     setDisplay(display.filter(person => person.id !== id))
