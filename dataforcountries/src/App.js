@@ -15,6 +15,15 @@ function App() {
     setUserInput(event.target.value)
   }
 
+  const hook = () => {
+    axios
+      .get("https://studies.cs.helsinki.fi/restcountries/api/all")
+      .then(result => console.log(result))
+      .catch(error => console.log(error))
+  }
+
+  useEffect(hook, [])
+
   return (
     <>
     <SearchBar onChange={handleUserInput}/>
