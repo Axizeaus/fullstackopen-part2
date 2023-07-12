@@ -14,7 +14,6 @@ function App() {
 
   const handleUserInput = (event) => {
     const filter = event.target.value;
-    console.log(filter);
     setUserInput(filter);
     const re = new RegExp(filter.toLowerCase());
     let found = [];
@@ -42,14 +41,12 @@ function App() {
 
   
   useEffect(hook, []);
-
-  console.log('filter ', filter)
+  console.log(countries);
 
   return (
     <>
     <SearchBar onChange={handleUserInput}/>
-    <Results />
-    <FilteredData filteredData={filter} userInput={userInput}/>
+    <FilteredData filteredData={filter} userInput={userInput} countries={countries}/>
     </>
   );
 }
