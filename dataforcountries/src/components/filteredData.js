@@ -1,19 +1,26 @@
 import ListItem from './listItem'
 
-export default function FilteredList({filteredData}){
-  if (filteredData === null) {
-    return <></>;
+export default function FilteredList({filteredData, userInput}){
+
+  if (filteredData !== null && filteredData.length > 10 && userInput.length !== 0) {
+    return <div>Too many matches</div>;
   }
-  // if (filteredData.length > 10){
-  //   console.log('too many matches, be more specific');
-  //   return;
-  // }
+
+  if (filteredData !== null &&  filteredData.length === 1) {
+    console.log(filteredData);
+  }
+
+  if (userInput === ''){
+    return;
+  }
+
+  console.log(filteredData);
   
   return (
     <ul>
-      {
+      { userInput !== 0 &&
         filteredData.map(
-          country => <ListItem item={country} />
+          item => <ListItem item={item} />
         )
       }
     </ul>

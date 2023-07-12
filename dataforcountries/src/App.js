@@ -10,7 +10,7 @@ function App() {
 
   const [userInput, setUserInput] = useState('');
   const [countries, setCountries] = useState([]);
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState(new Set);
 
   const handleUserInput = (event) => {
     const filter = event.target.value;
@@ -24,7 +24,6 @@ function App() {
       }
     })
     setFilter(extractCountryName(found))
-    console.log('found => ', extractCountryName(found))
   }
 
   function extractCountryName(ls){
@@ -38,17 +37,19 @@ function App() {
         setCountries(countries.concat(result.data));
       })
       .catch(error => console.log(error))
+    return () => setCountries([])
   }
 
   
   useEffect(hook, []);
-  console.log('filter => ', filter)
+
+  console.log('filter ', filter)
 
   return (
     <>
     <SearchBar onChange={handleUserInput}/>
     <Results />
-    <FilteredData filteredData={filter}/>
+    <FilteredData filteredData={filter} userInput={userInput}/>
     </>
   );
 }
