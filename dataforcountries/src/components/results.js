@@ -1,31 +1,10 @@
+import Show from "./show";
+
 export default function Results({ result }) {
   let data = result.result;
-  let languages = [];
-  for (let [key, value] of Object.entries(data.languages)) {
-    languages.push(value);
-  }
 
-  console.log(data.languages);
-  return (
-    <>
-      <h1>{data.name.common}</h1>
-
-      <p>capital : {data.capital[0]}</p>
-      <p>area : {data.area} </p>
-
-      <h3>languages</h3>
-
-      <ul>
-        {languages.map((language) => (
-          <li>{language}</li>
-        ))}
-      </ul>
-
-      <img src={data.flags.png} alt="flag" />
-    </>
-  );
+  return <Show data={data} />;
 }
-
 // {
 //   "result": {
 //     "name": {

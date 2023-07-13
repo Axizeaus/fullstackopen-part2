@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 
 import './App.css';
 import SearchBar from './components/searchbar';
-import Results from './components/results';
 import FilteredData from './components/filteredData'
 import axios from 'axios';
 
@@ -41,7 +40,6 @@ function App() {
 
   
   useEffect(hook, []);
-  console.log(countries);
 
   return (
     <>
@@ -50,11 +48,5 @@ function App() {
     </>
   );
 }
-
-
-
-
-
-
 
 export default App;
